@@ -33,6 +33,9 @@ module Tire
           self.log "MockClient.post #{address}, #{json}"
           request = address.split('/')
           id = request.pop
+
+          return if id == '_refresh'
+
           type = request.pop
           index = request.pop
           words = ActiveSupport::JSON.decode(json).values.flatten.map { |value| value.to_s.split(' ') }.flatten

@@ -98,6 +98,17 @@ describe Tire::Http::Client::MockClient do
     end
   end
 
+  describe 'refreshing an index' do
+    let(:id) { "4edd135cf956f718aa000020" }
+    let(:index) { "profiles" }
+    let(:type) { "profile" }
+
+    it 'should not fail' do
+      expect { described_class.post 'http://url/#{index}/#{type}/_refresh', '' }.
+        to_not raise_error
+    end
+
+  end
   #MockTireTracker.post http://localhost:9200/questions_of_the_day/question_of_the_day/4edd1353f956f718aa000001, {"text":"Am I tomorrow's question?","choices_text":["I don't know","yes","no"],"display_date":"2011-12-06"}
   #MockTireTracker.post response = 200 : {"ok":true,"_index":"questions_of_the_day","_type":"question_of_the_day","_id":"4edd1353f956f718aa000001","_version":2}
 
