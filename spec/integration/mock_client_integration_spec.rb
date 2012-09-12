@@ -65,7 +65,15 @@ describe Tire::Http::Client::MockClient do
 
       its(:body) { should == %[{"took":0,"timed_out":false,"_shards":{"total":20,"successful":20,"failed":0},"hits":{"total":1,"max_score":10.0,"hits":[{"_index":"#{index1}","_type":"#{type1}","_id":"#{id1}","_score":1.0,"_source":#{object1}}]}}] }
       its(:code) { should be(200) }
+
+      context 'with a type' do
+        subject { described_class.get "http://url/#{index1}/#{type1}/_search", query }
+
+        its(:body) { should == %[{"took":0,"timed_out":false,"_shards":{"total":20,"successful":20,"failed":0},"hits":{"total":1,"max_score":10.0,"hits":[{"_index":"#{index1}","_type":"#{type1}","_id":"#{id1}","_score":1.0,"_source":#{object1}}]}}] }
+        its(:code) { should be(200) }
+      end
     end
+
   end
 
   describe 'deleting an index' do

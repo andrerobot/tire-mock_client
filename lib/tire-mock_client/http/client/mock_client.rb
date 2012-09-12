@@ -56,14 +56,16 @@ module Tire
 
         def self.get(address, json)
           split_address = address.gsub('http://','').split("/")
-
-          the_filter = split_address[-2] if split_address[0] != split_address[-2]
+          operation_index = split_address.rindex { |e| e =~ /^\_/ }
+          unless operation_index.nil?
+            the_filter = split_address[operation_index-1] if split_address[0] != split_address[operation_index-1]
+          end
           self.log "MockClient.get #{address}, #{json}"
           query = ActiveSupport::JSON.decode(json)['query']['query_string']['query']
           ids = words_to_ids[query]
 
           results = Array(ids).inject([]) do |collector, id|
-            if the_filter.nil? || id[:index] == the_filter
+            if the_filter.nil? || (id[:index] == the_filter || id[:type] == the_filter)
               collector << {_index: id[:index], _type: id[:type], _id: id[:id], _score: 1.0, _source: ids_to_json[id[:id]]}
             else
               collector
